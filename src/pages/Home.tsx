@@ -132,7 +132,7 @@ const Home: React.FC = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              <img src="/profile.JPG" alt="Hazel Zhou" />
+              <img src="/profile.jpg" alt="Hazel Zhou" />
             </ProfileImage>
           </ScrollAnimation>
         </HeroContent>
