@@ -13,7 +13,7 @@ https://haizhenzhou.com
 - I registered the domain haizhenzhou.com through Google Cloud.
 - HTTPS encryption is enabled.
 - I used AI to help design and refine the website's code and content.
-- The project repository is public for review.
+- The project repository is public for review at https://github.com/Hazel122/hazel122.github.io
 
 ---
 
