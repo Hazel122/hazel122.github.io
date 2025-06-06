@@ -4,8 +4,7 @@
 
 You can view my personal website at:
 
-- https://haizhenzhou.com
-- https://hazel122.github.io
+https://haizhenzhou.com
 
 ## Development Notes
 
