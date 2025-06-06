@@ -1,24 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import Icon from '../components/Icon';
 import ScrollAnimation from '../components/ScrollAnimation';
 
 const HomeContainer = styled.div`
   min-height: 100vh;
+  padding: 0;
 `;
 
 const HeroSection = styled.section`
   min-height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   background-color: ${({ theme }) => theme.colors.background};
+  padding: 0;
+  padding-top: 4rem;
 `;
 
 const HeroContent = styled.div`
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: ${({ theme }) => theme.spacing.xl};
   display: grid;
@@ -29,31 +32,41 @@ const HeroContent = styled.div`
   @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
     grid-template-columns: 1fr;
     text-align: center;
+    gap: ${({ theme }) => theme.spacing.xl};
   }
 `;
 
 const HeroText = styled.div`
   h1 {
-    font-size: 4rem;
-    margin-bottom: ${({ theme }) => theme.spacing.md};
+    font-size: 4.5rem;
+    margin-bottom: ${({ theme }) => theme.spacing.lg};
     color: ${({ theme }) => theme.colors.primary};
+    line-height: 1.2;
   }
 
   p {
-    font-size: 1.2rem;
-    margin-bottom: ${({ theme }) => theme.spacing.lg};
+    font-size: 1.3rem;
+    margin-bottom: ${({ theme }) => theme.spacing.xl};
     color: ${({ theme }) => theme.colors.text};
+    line-height: 1.6;
+    max-width: 90%;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    p {
+      max-width: 100%;
+    }
   }
 `;
 
 const SocialLinks = styled.div`
   display: flex;
-  gap: ${({ theme }) => theme.spacing.md};
-  margin-top: ${({ theme }) => theme.spacing.lg};
+  gap: ${({ theme }) => theme.spacing.lg};
+  margin-top: ${({ theme }) => theme.spacing.xl};
 
   a {
     color: ${({ theme }) => theme.colors.text};
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     transition: color ${({ theme }) => theme.transitions.default};
 
     &:hover {
@@ -62,9 +75,17 @@ const SocialLinks = styled.div`
   }
 `;
 
+const ProfileImageContainer = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  padding-bottom: 60px; // Space for fun facts
+`;
+
 const ProfileImage = styled(motion.div)`
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
   aspect-ratio: 1;
   background-color: ${({ theme }) => theme.colors.secondary};
   border-radius: 50%;
@@ -79,7 +100,44 @@ const ProfileImage = styled(motion.div)`
   }
 `;
 
+const FunFacts = styled(motion.div)`
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: ${({ theme }) => theme.colors.background};
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.primary};
+  box-shadow: ${({ theme }) => theme.shadows.medium};
+  white-space: nowrap;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+
+  &:hover {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
+  }
+`;
+
+const funFacts = [
+  "🏊‍♀️ Former professional swimmer",
+  "🍲 Hotpot lover",
+  "🐕 Dog person! (but I like cats too)",
+];
+
 const Home: React.FC = () => {
+  const [currentFactIndex, setCurrentFactIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentFactIndex((prev) => (prev + 1) % funFacts.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <HomeContainer id="home">
       <HeroSection>
@@ -100,7 +158,7 @@ const Home: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
-                Hi! I am a Computer Science student at the University of Washington, Seattle (expected graduation: August - December 2026). I am passionate about software engineering, machine learning, and building impactful web applications. My experience includes internships in software engineering and machine learning, and I enjoy working with Python, JavaScript, React, and more. Explore my site to learn about my classes, projects, and professional journey!
+                Hi! You can call me Haizhen ('hi-gen') or Hazel. I am a Computer Science student at the University of Washington, Seattle (expected graduation: August or December 2026). My experience includes internships in software engineering and machine learning, and I enjoy working with Python, C/C++, Java, React, and more. Nice to meet you!
               </motion.p>
             </ScrollAnimation>
             <ScrollAnimation delay={0.4}>
@@ -127,13 +185,26 @@ const Home: React.FC = () => {
             </ScrollAnimation>
           </HeroText>
           <ScrollAnimation direction="right" delay={0.4}>
-            <ProfileImage
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              <img src="/profile.jpg" alt="Hazel Zhou" />
-            </ProfileImage>
+            <ProfileImageContainer>
+              <ProfileImage
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <img src="/profile.jpg" alt="Hazel Zhou" />
+              </ProfileImage>
+              <AnimatePresence mode="wait">
+                <FunFacts
+                  key={currentFactIndex}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 0.8, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {funFacts[currentFactIndex]}
+                </FunFacts>
+              </AnimatePresence>
+            </ProfileImageContainer>
           </ScrollAnimation>
         </HeroContent>
       </HeroSection>
